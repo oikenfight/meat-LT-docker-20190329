@@ -1,0 +1,12 @@
+version: '3'
+services:
+  # サービス名（docker-compose を使う場合、この名前で他のコンテナからアクセスできる）
+  nginx:
+    build:    # Dockerfile のパスを指定して build し、イメージを作成する
+      context: ./docker/nginx
+      dockerfile: Dockerfile
+    ports:
+      - "80:80"
+    volumes:
+      - ./public/:/usr/share/nginx/html
+      - ./logs/nginx/:/var/log/nginx    # logs をローカルから見える位置にマウント

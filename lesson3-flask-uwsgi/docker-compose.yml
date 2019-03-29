@@ -1,0 +1,35 @@
+version: '3'
+
+services:
+  workspace:
+    image: workspace
+    build:
+      context: docker/workspace
+      dockerfile: Dockerfile
+    volumes:
+      - ./:/workspace
+      - ./logs/uwsgi/:/workspace/logs
+    working_dir: "/workspace"
+    ports:
+      - "3031:3031"     # nginx と uwsgi を socket 接続するためのポート
+  nginx:
+    image: nginx
+    build:
+      context: ./docker/nginx
+      dockerfile: Dockerfile
+    links:
+      - workspace    # コンテナ内でサービスを名前解決できるようにする
+    ports:
+      - "80:80"
+    volumes:
+      - ./logs/nginx/:/var/log/nginx
+  python:
+    depends_on:
+      - workspace
+    image: python
+    build:
+      context: ./docker/python
+      dockerfile: Dockerfile
+    volumes:
+      - ./:/workspace
+    working_dir: "/workspace"

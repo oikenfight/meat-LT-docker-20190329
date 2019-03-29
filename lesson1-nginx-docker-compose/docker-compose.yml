@@ -1,0 +1,9 @@
+version: '3'
+services:
+  # サービス名（docker-compose を使う場合、この名前で他のコンテナからアクセスできる）
+  nginx:
+    image: nginx    # 公式の nginx:latest を持ってくる
+    ports:
+      - "80:80"
+    volumes:
+      - ./logs/nginx/:/var/log/nginx    # logs をローカルから見える位置にマウント
